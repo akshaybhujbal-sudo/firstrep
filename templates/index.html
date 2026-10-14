@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard · Student Records{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-card">
+    <div class="hero-content">
+        <span class="badge-tag">DATA STRUCTURES MINI PROJECT</span>
+        <h1>Student Record Management System</h1>
+        <p class="hero-description">
+            A real-time demonstration of fundamental array algorithms implemented in Python. 
+            All student records are maintained in a contiguous, dynamic in-memory list supporting linear search, insertion, and deletion.
+        </p>
+    </div>
+    <div class="hero-actions">
+        <a class="button button-primary" href="{{ url_for('add_student') }}">
+            + Insert New Student
+        </a>
+        <a class="button button-outline" href="{{ url_for('search') }}">
+            🔍 Search by Roll No.
+        </a>
+    </div>
+</section>
+
+<!-- Academic Statistics Cards -->
+<section class="stats-grid" aria-label="Project Metrics">
+    <div class="stat-card">
+        <span class="stat-label">Total Student Records</span>
+        <h2 class="stat-value">{{ students|length }}</h2>
+        <span class="stat-subtext">Array Size (n elements)</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">Storage Structure</span>
+        <h2 class="stat-value">Dynamic Array</h2>
+        <span class="stat-subtext">Python List (`students = []`)</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">Search Algorithm</span>
+        <h2 class="stat-value">Linear Search</h2>
+        <span class="stat-subtext">Time Complexity: O(n)</span>
+    </div>
+</section>
+
+<!-- Student Records Panel -->
+<section class="panel-card">
+    <div class="panel-header">
+        <div>
+            <h2>All Student Records</h2>
+            <p class="panel-subtitle">Traversing dynamic array in order of insertion</p>
+        </div>
+        <div class="panel-links">
+            <a class="text-link" href="{{ url_for('search') }}">Find a record →</a>
+        </div>
+    </div>
+
+    {% if students %}
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th scope="col">Roll No.</th>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">Semester</th>
+                    <th scope="col" class="text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td><strong class="roll-badge">#{{ student.roll_no }}</strong></td>
+                    <td class="student-name">{{ student.name }}</td>
+                    <td><span class="branch-pill">{{ student.branch }}</span></td>
+                    <td>Sem {{ student.semester }}</td>
+                    <td class="text-right">
+                        <form method="POST"
+                              action="{{ url_for('delete', roll_no=student.roll_no) }}"
+                              onsubmit="return confirm('Are you sure you want to delete student \'{{ student.name }}\' (Roll No: {{ student.roll_no }})? This will remove the element from the dynamic array.');"
+                              style="display: inline;">
+                            <button class="button-danger" type="submit" aria-label="Delete student {{ student.name }}">
+                                🗑️ Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📂</div>
+        <h3>No student records found in memory</h3>
+        <p>The dynamic array is currently empty. Insert your first student record to get started!</p>
+        <a class="button button-primary" href="{{ url_for('add_student') }}">+ Add First Student</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

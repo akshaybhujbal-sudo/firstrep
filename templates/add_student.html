@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Insert Student · Student Records{% endblock %}
+
+{% block content %}
+<section class="form-wrapper">
+    <div class="form-card">
+        <div class="form-header">
+            <span class="badge-tag">DYNAMIC ARRAY INSERTION</span>
+            <h1>Insert Student Record</h1>
+            <p class="form-subtitle">
+                Appending a record checks for duplicate roll numbers in O(n) time, then performs an amortized O(1) array append.
+            </p>
+        </div>
+
+        <form method="POST" action="{{ url_for('add_student') }}" class="modern-form" novalidate>
+            <div class="form-group">
+                <label for="roll_no">
+                    Roll Number <span class="required-asterisk">*</span>
+                </label>
+                <input id="roll_no"
+                       name="roll_no"
+                       type="number"
+                       min="1"
+                       step="1"
+                       placeholder="e.g. 101"
+                       required
+                       aria-describedby="roll_no_help"
+                       autocomplete="off">
+                <small id="roll_no_help" class="form-help-text">Must be a unique positive integer.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="name">
+                    Full Name <span class="required-asterisk">*</span>
+                </label>
+                <input id="name"
+                       name="name"
+                       type="text"
+                       maxlength="100"
+                       placeholder="e.g. John Doe"
+                       required
+                       autocomplete="name">
+                <small class="form-help-text">Between 2 and 100 characters.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="branch">
+                    Branch / Department <span class="required-asterisk">*</span>
+                </label>
+                <select id="branch" name="branch" required>
+                    <option value="" disabled selected>Select academic branch</option>
+                    <option value="Computer Science (CSE)">Computer Science (CSE)</option>
+                    <option value="Artificial Intelligence (AI-ML)">Artificial Intelligence (AI-ML)</option>
+                    <option value="Information Technology (IT)">Information Technology (IT)</option>
+                    <option value="Electronics (ENTC)">Electronics (ENTC)</option>
+                    <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)</option>
+                    <option value="Civil Engineering (CE)">Civil Engineering (CE)</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="semester">
+                    Current Semester <span class="required-asterisk">*</span>
+                </label>
+                <input id="semester"
+                       name="semester"
+                       type="number"
+                       min="1"
+                       max="12"
+                       step="1"
+                       placeholder="e.g. 4"
+                       required
+                       aria-describedby="semester_help">
+                <small id="semester_help" class="form-help-text">Enter semester number (1 to 12).</small>
+            </div>
+
+            <div class="form-actions">
+                <button class="button button-primary button-block" type="submit">
+                    💾 Save Student Record
+                </button>
+                <a class="button button-ghost button-block" href="{{ url_for('index') }}">
+                    Cancel & Return to Dashboard
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

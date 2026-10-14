@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Search Student · Linear Search Algorithm{% endblock %}
+
+{% block content %}
+<section class="form-wrapper">
+    <div class="form-card">
+        <div class="form-header">
+            <span class="badge-tag">LINEAR SEARCH ALGORITHM</span>
+            <h1>Find Student Record</h1>
+            <p class="form-subtitle">
+                Linear search iterates sequentially from index 0 to n-1, comparing each student's roll number until a match is found.
+            </p>
+        </div>
+
+        <form method="POST" action="{{ url_for('search') }}" class="modern-form">
+            <div class="form-group">
+                <label for="roll_no">Target Roll Number</label>
+                <div class="search-input-group">
+                    <input id="roll_no"
+                           name="roll_no"
+                           type="number"
+                           min="1"
+                           value="{{ searched_roll if searched_roll else '' }}"
+                           placeholder="Enter roll number (e.g. 101)"
+                           required
+                           autofocus
+                           autocomplete="off">
+                    <button class="button button-primary" type="submit">
+                        🔍 Search
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        {% if searched and student %}
+        <!-- Search Result Card (Record Found) -->
+        <div class="search-result-card found-card">
+            <div class="result-header">
+                <div class="status-indicator status-found">● Match Found</div>
+                <span class="complexity-note">Search Time: O(n) worst-case</span>
+            </div>
+
+            <div class="result-grid">
+                <div class="result-item">
+                    <span class="result-label">Roll Number</span>
+                    <strong class="result-value">#{{ student.roll_no }}</strong>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Full Name</span>
+                    <strong class="result-value">{{ student.name }}</strong>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Branch / Department</span>
+                    <span class="result-value branch-pill">{{ student.branch }}</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Current Semester</span>
+                    <strong class="result-value">Semester {{ student.semester }}</strong>
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <form method="POST"
+                      action="{{ url_for('delete', roll_no=student.roll_no) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this record?');"
+                      style="display: inline;">
+                    <button class="button-danger" type="submit">
+                        🗑️ Delete This Record
+                    </button>
+                </form>
+                <a class="button button-outline" href="{{ url_for('index') }}">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+        {% elif searched and not student %}
+        <!-- Search Result (Record Not Found) -->
+        <div class="search-result-card notfound-card">
+            <div class="status-indicator status-notfound">✕ No Match Found</div>
+            <p>
+                Linear search completed a full traversal over all stored records.
+                No student record was found with Roll Number <strong>{{ searched_roll }}</strong>.
+            </p>
+            <div class="notfound-actions">
+                <a class="button button-primary" href="{{ url_for('add_student') }}">
+                    + Add Student with Roll No. {{ searched_roll }}
+                </a>
+                <a class="button button-ghost" href="{{ url_for('index') }}">
+                    Dashboard
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

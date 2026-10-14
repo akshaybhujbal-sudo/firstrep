@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Record Management System{% endblock %} · Data Structures Mini Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{{ url_for('index') }}">
+                <span class="brand-badge">DS</span>
+                <span class="brand-text">StudentHub</span>
+            </a>
+
+            <nav aria-label="Main Navigation">
+                <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Dashboard</a>
+                <a href="{{ url_for('add_student') }}" class="nav-link {% if request.endpoint == 'add_student' %}active{% endif %}">+ Add Student</a>
+                <a href="{{ url_for('search') }}" class="nav-link {% if request.endpoint == 'search' %}active{% endif %}">🔍 Search</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Flash Notification Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts-container" role="region" aria-label="Notifications">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            <span class="alert-icon">
+                                {% if category == 'success' %}✓{% elif category == 'error' %}⚠️{% else %}ℹ️{% endif %}
+                            </span>
+                            <span class="alert-text">{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Academic Footer -->
+    <footer class="footer">
+        <p><strong>Student Record Management System</strong> · Python Data Structures Mini Project</p>
+        <p class="footer-subtext">Storage: In-Memory Dynamic Array (Python List) · Search Algorithm: Linear Search · Academic Demo</p>
+    </footer>
+</body>
+</html>
